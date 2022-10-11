@@ -11,6 +11,9 @@ app.get('/', (req, res) => {
 app.get('/ping', (req, res) => {
     res.send(req.headers);
 });
+app.get('/*', (req, res) => {
+    res.send('PAGE 404');
+});
 app.listen(3000, () => {
     console.log('The application is listening on port 3000!');
 });
