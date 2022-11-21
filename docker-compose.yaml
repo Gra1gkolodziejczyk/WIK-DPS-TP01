@@ -12,10 +12,6 @@ services:
       context: .
       dockerfile: Dockerfile
 
-    # Configuration des ports à exposer sur le réseau
-    ports:
-      - "3000"
-
     # Nombre de réplicas souhaités du même container
     deploy:
       replicas: 4 # Ici on déploie 4 fois le container au sein du service my_app
@@ -47,18 +43,12 @@ services:
     # Monter un fichier du répertoire courant de l'hôte
     # sur le service
     volumes:
-      - ./nginx/proxy.conf:/etc/nginx/proxy.conf
-      - ./nginx/core.conf:/etc/nginx/core.conf
-      - ./nginx/html:/usr/share/nginx/html
+      - ./nginx/nginx.conf/nginx.conf:/etc/nginx/nginx.conf
 
     # Configurer les ports exposés sur le réseau et
     # le port-forwarding entre l'hôte et le service
     ports:
-      - 80:80
-      - 443:443
-
-    links:
-      - my_app
+      - 8080:80
 
     # Définir une relation de dépendance
     # Si my_app n'est pas prêt alors pas de proxy

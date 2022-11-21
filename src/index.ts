@@ -8,12 +8,8 @@ app.get('/', (req, res) => {
 })
 
 app.get('/ping', (req, res) => {
-  res.send(req.hostname);
-  console.log(os.hostname());
-})
-
-app.get('/tarace', (req, res) => {
-  res.send(req.headers);
+  console.log(os.hostname())
+  res.json(JSON.stringify(req.headers)).status(200)
 })
 
 app.get('/*', (req, res) => {
