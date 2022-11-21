@@ -1,12 +1,12 @@
 # Version de l'API Docker Compose à utiliser pour lire ce fichier
-version: '3.8'
+version: "3.8"
 
 # Déclaration des services
 services:
 
   # Un service nommée my_app
   my_app:
-
+  
     # Définition du Dockerfile à build et à utiliser
     build:
       context: .
@@ -14,7 +14,7 @@ services:
 
     # Configuration des ports à exposer sur le réseau
     ports:
-      - '8080'
+      - "3000"
 
     # Nombre de réplicas souhaités du même container
     deploy:
@@ -25,7 +25,7 @@ services:
 
     # Définir des variables d'environnement pour le service
     environment:
-      - PORT=8080
+      - PORT=3000
 
     # Configure le réseau du service
     # Il est accessible seulement via le réseau nommé
@@ -33,16 +33,32 @@ services:
     networks:
       - front-network
 
+    # Montage du volume nommé db_data dans le service
+    # sur chaque container qui le compose
+    #volumes:
+    #  - db_data:/app/bdd.db
+
   # Un service nommé proxy
   proxy:
-
     # L'image Docker a utilisé pour le service
     image: nginx:latest
+    container_name: nginxrp
+
+    # Monter un fichier du répertoire courant de l'hôte
+    # sur le service
+    volumes:
+      - ./nginx/proxy.conf:/etc/nginx/proxy.conf
+      - ./nginx/core.conf:/etc/nginx/core.conf
+      - ./nginx/html:/usr/share/nginx/html
 
     # Configurer les ports exposés sur le réseau et
     # le port-forwarding entre l'hôte et le service
     ports:
-      - 8081:80
+      - 80:80
+      - 443:443
+
+    links:
+      - my_app
 
     # Définir une relation de dépendance
     # Si my_app n'est pas prêt alors pas de proxy
@@ -60,7 +76,3 @@ networks:
   # Un network nommé front-network qui utilise le driver bridge
   front-network:
     driver: bridge
-
-# Déclaration des volumes nommés
-volumes:
-  db_data:

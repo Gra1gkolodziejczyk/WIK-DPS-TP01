@@ -12,6 +12,10 @@ app.get('/ping', (req, res) => {
   console.log(os.hostname());
 })
 
+app.get('/tarace', (req, res) => {
+  res.send(req.headers);
+})
+
 app.get('/*', (req, res) => {
   res.send('This is a PAGE 404');
 })
